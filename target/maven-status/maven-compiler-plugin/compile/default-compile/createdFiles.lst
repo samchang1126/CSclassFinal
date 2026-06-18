@@ -1,0 +1,11 @@
+com\example\demo\DemoApplication.class
+com\example\demo\model\AnalysisResult.class
+com\example\demo\model\AnalysisRecord.class
+com\example\demo\model\HealthLog.class
+com\example\demo\service\HealthLogService.class
+com\example\demo\model\AnalysisRequest.class
+com\example\demo\controller\APIController.class
+com\example\demo\controller\HealthLogController.class
+com\example\demo\repository\AnalysisRepository.class
+com\example\demo\service\MLService.class
+com\example\demo\repository\HealthLogRepository.class

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧健康日誌與風險評估系統</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen">
+
+    <header class="bg-indigo-900 text-white shadow-md px-6 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">
+            🩺 智慧健康日誌與風險評估系統 (決策樹動態分析版)
+        </h1>
+        <span class="bg-indigo-800 text-xs px-3 py-1 rounded-full text-indigo-200 font-mono">任務 A：折線圖點位風險色彩識別優化</span>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <section class="lg:col-span-1 bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between">
+            <div>
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    📝 記錄今日健康數據
+                </h2>
+                <form id="health-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">使用者 ID</label>
+                        <input type="text" id="user_id" placeholder="例如：USER_01" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">記錄日期</label>
+                        <input type="date" id="log_date" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">睡眠時數 (小時)</label>
+                        <input type="number" id="sleep_hours" step="0.1" min="0" max="24" placeholder="例如：7.5" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">當日步數</label>
+                        <input type="number" id="steps" min="0" max="100000" placeholder="例如：8000" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-600 mb-1">心情分數 (1 ~ 10 分)</label>
+                        <input type="number" id="mood_score" min="1" max="10" placeholder="1 最差，10 最好" required class="w-full rounded-xl border border-slate-200 px-4 py-2.5 focus:outline-none focus:border-indigo-500 transition">
+                    </div>
+                    
+                    <div id="error-box" class="hidden text-sm bg-red-50 text-red-600 p-3 rounded-xl border border-red-100"></div>
+
+                    <button type="submit" id="submit-btn" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-100 transition flex items-center justify-center gap-2">
+                        <span id="submit-text">送出評估分析</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section class="lg:col-span-2 space-y-6">
+            
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    📊 C4.5 決策樹模型即時判定面板
+                </h2>
+                
+                <div id="result-empty" class="text-center py-6 text-slate-400">
+                    <p>請於左側輸入數據並送出，系統將透過多層分支模型計算健康風險等級。</p>
+                </div>
+
+                <div id="result-content" class="hidden space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 bg-slate-50 p-3 rounded-xl">
+                        <div class="text-lg font-black text-slate-900 flex items-center gap-3">
+                            即時風險判定：<span id="result-badge" class="px-3 py-0.5 rounded-full text-xs font-black shadow-sm"></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <h3 class="text-xs font-bold text-slate-700 mb-2">🌲 決策樹層次決策路徑 (Multi-Layer Branches)</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-center text-xs font-mono">
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">
+                                <p class="text-slate-400 font-bold text-[10px]">第一層：睡眠分支</p>
+                                <p id="node-sleep" class="text-slate-900 font-black">-</p>
+                            </div>
+                            <div class="flex items-center justify-center text-slate-300 hidden md:flex">➔</div>
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">
+                                <p class="text-slate-400 font-bold text-[10px]">第二層：步數分支</p>
+                                <p id="node-steps" class="text-slate-900 font-black">-</p>
+                            </div>
+                            <div class="flex items-center justify-center text-slate-300 hidden md:flex">➔</div>
+                            <div class="bg-white border border-slate-200 p-2 rounded-lg">
+                                <p class="text-slate-400 font-bold text-[10px]">第三層：心情分支</p>
+                                <p id="node-mood" class="text-slate-900 font-black">-</p>
+                            </div>
+                            <div class="flex items-center justify-center text-slate-300 hidden md:flex">➔</div>
+                            <div id="node-output-card" class="text-white p-2 rounded-lg font-bold flex flex-col justify-center text-center">
+                                <p class="text-slate-200 text-[9px]">葉節點輸出</p>
+                                <p id="node-output" class="font-black text-xs">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-2 mb-2">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        📈 歷史健康數據趨勢折線圖
+                    </h2>
+                    <div class="flex items-center gap-3 text-xs font-medium">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>低風險點</span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>中風險點</span>
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>高風險點</span>
+                    </div>
+                </div>
+                <div class="h-64 w-full">
+                    <canvas id="trendsChart"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 border-b border-slate-100 pb-3">
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        📋 歷史健康日誌紀錄庫 (DB 儲存)
+                    </h2>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm font-medium text-slate-600">選擇用戶篩選:</label>
+                        <select id="user-filter" class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm bg-white focus:outline-none focus:border-indigo-500">
+                            <option value="ALL">顯示全部人 (All Users)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto max-h-72 overflow-y-auto">
+                    <table class="w-full text-left text-sm text-slate-600">
+                        <thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase sticky top-0">
+                            <tr>
+                                <th class="px-4 py-3">用戶 ID</th>
+                                <th class="px-4 py-3">紀錄日期</th>
+                                <th class="px-4 py-3">睡眠時數</th>
+                                <th class="px-4 py-3">當日步數</th>
+                                <th class="px-4 py-3">心情分數</th>
+                                <th class="px-4 py-3 rounded-r-lg">風險等級徽章</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody" class="divide-y divide-slate-100">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        let allLogsGlobal = []; // 快取全域數據
+        let trendsChart = null; // Chart.js 實例
+
+        const form = document.getElementById('health-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const errorBox = document.getElementById('error-box');
+        const resultEmpty = document.getElementById('result-empty');
+        const resultContent = document.getElementById('result-content');
+        const userFilter = document.getElementById('user-filter');
+        
+        document.getElementById('log_date').valueAsDate = new Date();
+
+        const riskBadgeMap = {
+            '低': { bg: 'bg-emerald-100 text-emerald-800 border-emerald-200', card: 'bg-emerald-600', label: '🟢 低風險', color: '#10b981' },
+            '中': { bg: 'bg-amber-100 text-amber-800 border-amber-200', card: 'bg-amber-500', label: '🟡 中風險', color: '#f59e0b' },
+            '高': { bg: 'bg-red-100 text-red-800 border-red-200', card: 'bg-red-600', label: '🔴 高風險', color: '#ef4444' }
+        };
+
+        // 核心進化功能：生成可以看出風險狀態點點的 Chart.js
+        function updateChart(filteredLogs) {
+            const sortedLogs = [...filteredLogs].sort((a, b) => new Date(a.log_date) - new Date(b.log_date));
+            const displayLogs = sortedLogs.slice(-30);
+
+            const labels = displayLogs.map(log => `${log.user_id} (${log.log_date.slice(5)})`);
+            const sleepData = displayLogs.map(log => log.sleep_hours);
+            const stepsData = displayLogs.map(log => log.steps);
+            const moodData = displayLogs.map(log => log.mood_score);
+
+            // 根據每筆資料的 risk_level 動態生成點的顏色陣列 [加分重點！]
+            const pointColors = displayLogs.map(log => {
+                return riskBadgeMap[log.risk_level] ? riskBadgeMap[log.risk_level].color : '#64748b';
+            });
+
+            if (trendsChart) {
+                trendsChart.destroy();
+            }
+
+            const ctx = document.getElementById('trendsChart').getContext('2d');
+            trendsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { 
+                            label: '睡眠時數 (小時)', 
+                            data: sleepData, 
+                            borderColor: '#4f46e5', 
+                            backgroundColor: 'transparent', 
+                            yAxisID: 'y_left', 
+                            tension: 0.15,
+                            pointBackgroundColor: pointColors, // 點的填滿顏色依據風險判定
+                            pointBorderColor: pointColors,      // 點的外框顏色依據風險判定
+                            pointRadius: 5,                    // 加大數據點半徑使其更明顯
+                            pointHoverRadius: 8                // 滑鼠移上去時放大
+                        },
+                        { 
+                            label: '當日步數 (步)', 
+                            data: stepsData, 
+                            borderColor: '#0ea5e9', 
+                            backgroundColor: 'transparent', 
+                            yAxisID: 'y_right', 
+                            tension: 0.15,
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 4,
+                            pointHoverRadius: 7
+                        },
+                        { 
+                            label: '心情分數 (分)', 
+                            data: moodData, 
+                            borderColor: '#a855f7', 
+                            backgroundColor: 'transparent', 
+                            yAxisID: 'y_left', 
+                            tension: 0.15,
+                            pointBackgroundColor: pointColors,
+                            pointBorderColor: pointColors,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                // 自訂 Tooltip 提示框，滑鼠移上去時顯示決策樹的分類結果
+                                footer: (tooltipItems) => {
+                                    const index = tooltipItems[0].dataIndex;
+                                    const originalLog = displayLogs[index];
+                                    return `決策樹判定：${originalLog.risk_level}風險等級`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y_left: { type: 'linear', position: 'left', min: 0, max: 12, title: { display: true, text: '睡眠 / 心情範圍' } },
+                        y_right: { type: 'linear', position: 'right', min: 0, max: 12000, grid: { drawOnChartArea: false }, title: { display: true, text: '步數範圍 (步)' } }
+                    }
+                }
+            });
+        }
+
+        function updateUserFilterOptions(logs) {
+            const currentSelection = userFilter.value;
+            const userIds = [...new Set(logs.map(log => log.user_id))].sort();
+            
+            userFilter.innerHTML = '<option value="ALL">顯示全部人 (All Users)</option>';
+            userIds.forEach(id => {
+                const opt = document.createElement('option');
+                opt.value = id;
+                opt.textContent = `用戶: ${id}`;
+                userFilter.appendChild(opt);
+            });
+
+            if ([...userFilter.options].some(o => o.value === currentSelection)) {
+                userFilter.value = currentSelection;
+            }
+        }
+
+        function renderTableAndChart() {
+            const selectedUser = userFilter.value;
+            const filteredLogs = selectedUser === 'ALL' 
+                ? allLogsGlobal 
+                : allLogsGlobal.filter(log => log.user_id === selectedUser);
+
+            const tbody = document.getElementById('history-tbody');
+            tbody.innerHTML = '';
+
+            if (filteredLogs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400 italic">📂 無符合條件之歷史數據</td></tr>`;
+                updateChart([]);
+                return;
+            }
+
+            const tableLogs = [...filteredLogs].sort((a, b) => new Date(b.log_date) - new Date(a.log_date));
+
+            tableLogs.forEach(log => {
+                const style = riskBadgeMap[log.risk_level] || { bg: 'bg-slate-100 text-slate-800', label: log.risk_level };
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-50 transition text-slate-700";
+                row.innerHTML = `
+                    <td class="px-4 py-2 font-bold text-indigo-700">${log.user_id || 'N/A'}</td>
+                    <td class="px-4 py-2 font-mono text-xs">${log.log_date}</td>
+                    <td class="px-4 py-2">${log.sleep_hours} 小時</td>
+                    <td class="px-4 py-2 font-mono">${Number(log.steps).toLocaleString()} 步</td>
+                    <td class="px-4 py-2">${log.mood_score} 分</td>
+                    <td class="px-4 py-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${style.bg}">
+                            ${style.label}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateChart(filteredLogs);
+        }
+
+        async function fetchHistoryLogs() {
+            try {
+                const response = await fetch('/health-logs');
+                if (!response.ok) throw new Error(`HTTP 異常狀態碼: ${response.status}`);
+                
+                allLogsGlobal = await response.json();
+                updateUserFilterOptions(allLogsGlobal);
+                renderTableAndChart();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('history-tbody').innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-red-500 bg-red-50 font-medium border border-red-100 rounded-xl">
+                            ⚠️ 重新讀取列表失敗：請確認 Java 後端與資料庫正常
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        userFilter.addEventListener('change', renderTableAndChart);
+
+        function renderTreeRoute(sleep, steps, mood, risk) {
+            resultEmpty.classList.add('hidden');
+            resultContent.classList.remove('hidden');
+
+            const badgeNode = document.getElementById('result-badge');
+            const style = riskBadgeMap[risk] || { bg: 'bg-slate-100 text-slate-800', card: 'bg-slate-700', label: risk };
+            
+            badgeNode.textContent = style.label;
+            badgeNode.className = `px-3 py-0.5 rounded-full text-xs font-black border ${style.bg}`;
+
+            document.getElementById('node-sleep').innerHTML = sleep < 6.0 
+                ? `<span class="text-red-600 font-bold">＜ 6.0小時</span><br><span class="text-[9px] text-slate-400">觸發嚴重缺乏睡眠</span>` 
+                : `<span class="text-emerald-600 font-bold">≥ 6.0小時</span><br><span class="text-[9px] text-slate-400">第一層順利通過</span>`;
+
+            document.getElementById('node-steps').innerHTML = steps < 5000 
+                ? `<span class="text-amber-600 font-bold">＜ 5,000步</span><br><span class="text-[9px] text-slate-400">日常運動量偏低</span>` 
+                : `<span class="text-emerald-600 font-bold">≥ 5,000步</span><br><span class="text-[9px] text-slate-400">第二層順利通過</span>`;
+
+            document.getElementById('node-mood').innerHTML = mood <= 4 
+                ? `<span class="text-red-500 font-bold">≤ 4 分</span><br><span class="text-[9px] text-slate-400">心理心情狀況差</span>` 
+                : `<span class="text-emerald-600 font-bold">&gt; 4 分</span><br><span class="text-[9px] text-slate-400">情緒心理狀態好</span>`;
+
+            const outputCard = document.getElementById('node-output-card');
+            outputCard.className = `${style.card} text-white p-2 rounded-lg shadow-sm font-bold flex flex-col justify-center text-center transition-all duration-200`;
+            document.getElementById('node-output').textContent = `${risk} 風險`;
+        }
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            errorBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitText.textContent = '進行決策切分中...';
+
+            const userIdValue = document.getElementById('user_id').value.trim();
+            const sleepValue = parseFloat(document.getElementById('sleep_hours').value);
+            const stepsValue = parseInt(document.getElementById('steps').value, 10);
+            const moodValue = parseInt(document.getElementById('mood_score').value, 10);
+
+            const payload = {
+                user_id: userIdValue,
+                log_date: document.getElementById('log_date').value,
+                sleep_hours: sleepValue,
+                steps: stepsValue,
+                mood_score: moodValue
+            };
+
+            try {
+                const response = await fetch('/health-logs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error(`伺服器拒絕請求，HTTP 代碼：${response.status}`);
+                const resultLog = await response.json();
+                
+                renderTreeRoute(sleepValue, stepsValue, moodValue, resultLog.risk_level);
+                await fetchHistoryLogs();
+
+            } catch (err) {
+                resultContent.classList.add('hidden');
+                resultEmpty.classList.remove('hidden');
+                errorBox.textContent = `發送失敗，請確保後端 POST /health-logs 運作正常。錯誤原因：${err.message}`;
+                errorBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitText.textContent = '送出評估分析';
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', fetchHistoryLogs);
+    </script>
+</body>
+</html>

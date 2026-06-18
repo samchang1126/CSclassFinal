@@ -1,0 +1,11 @@
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\controller\APIController.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\controller\HealthLogController.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\DemoApplication.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\model\AnalysisRecord.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\model\AnalysisRequest.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\model\AnalysisResult.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\model\HealthLog.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\repository\AnalysisRepository.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\repository\HealthLogRepository.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\service\HealthLogService.java
+C:\Users\user\Desktop\cs_class_final\src\main\java\com\example\demo\service\MLService.java

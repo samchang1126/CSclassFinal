@@ -1,0 +1,65 @@
+-- 組合 ①：高風險特徵案例（睡眠少 4~5.5、步數低 1000~3500、心情差 1~4）
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-03-01', 4.2, 1200, 2, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-03-02', 5.0, 2300, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-03-01', 4.8, 2800, 2, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-03-02', 4.1, 1100, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-03-01', 5.1, 2200, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-03-02', 4.4, 1400, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-03-01', 4.3, 1300, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-03-02', 5.4, 3200, 4, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-03-01', 4.6, 1700, 2, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-03-02', 5.2, 2900, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-03-01', 5.0, 2600, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-03-02', 4.5, 1600, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-03-01', 4.4, 1450, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-03-02', 5.3, 3150, 4, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-03-01', 5.2, 2750, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-03-02', 4.7, 1850, 2, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-03-01', 4.9, 2350, 2, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-03-02', 5.1, 2550, 3, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-03-01', 4.1, 1150, 1, '高');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-03-02', 5.5, 3450, 4, '高');
+
+-- 組合 ②：混合型普通與中間案例特徵（包含「步數正常 6500~8500 但心情差 2~3」）
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-04-01', 6.5, 7200, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-04-02', 6.2, 8100, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-04-01', 6.8, 6500, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-04-02', 6.0, 7800, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-04-01', 7.1, 8300, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-04-02', 6.3, 6900, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-04-01', 6.6, 7600, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-04-02', 6.9, 8200, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-04-01', 6.2, 6800, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-04-02', 7.2, 8400, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-04-01', 6.4, 7900, 2, '集中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-04-02', 6.1, 6700, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-04-01', 6.7, 8500, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-04-02', 6.6, 7300, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-04-01', 7.0, 6950, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-04-02', 6.2, 8150, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-04-01', 6.3, 7450, 3, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-04-02', 6.9, 8350, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-04-01', 6.6, 8050, 2, '中');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-04-02', 6.5, 7250, 3, '中');
+
+-- 組合 ③：低風險特徵案例（睡眠足 7~9、步數多 6000~10000、心情好 6~9）
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-05-01', 7.5, 8500, 8, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_01', '2026-05-02', 8.2, 9200, 7, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-05-01', 8.0, 9000, 9, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_02', '2026-05-02', 7.8, 6200, 6, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-05-01', 7.2, 7100, 7, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_03', '2026-05-02', 8.9, 10000, 9, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-05-01', 8.1, 9500, 8, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_04', '2026-05-02', 7.4, 6800, 6, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-05-01', 7.7, 6400, 6, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_05', '2026-05-02', 8.6, 9400, 9, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-05-01', 8.4, 9100, 8, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_06', '2026-05-02', 7.1, 7300, 7, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-05-01', 7.3, 6700, 6, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_07', '2026-05-02', 8.7, 9600, 9, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-05-01', 8.2, 8800, 7, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_08', '2026-05-02', 7.6, 7500, 8, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-05-01', 7.9, 8100, 8, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_09', '2026-05-02', 8.1, 8900, 7, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-05-01', 8.5, 9700, 9, '低');
+INSERT INTO health_logs (user_id, log_date, sleep_hours, steps, mood_score, risk_level) VALUES ('USER_10', '2026-05-02', 7.3, 6600, 6, '低');
